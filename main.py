@@ -98,7 +98,7 @@ async def on_member_remove(member):
 # Perintah tes untuk memastikan bot tidak bisu lagi
 @bot.command()
 async def ping(ctx):
-    await ctx.send("Pong! Bot Warung Kiamat siap siaga memantau server! 🚀")
+    await ctx.send("Hi! Bot Warung Kiamat siap siaga memantau server! 🚀")
 
 # 3. KONEKSIKAN KE DISCORD DEVELOPER PORTAL
 # PENTING: Masukkan TOKEN BARU yang sudah di-reset di sini!
