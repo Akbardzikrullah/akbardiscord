@@ -6,11 +6,12 @@ import io
 # 1. SETUP INTENTS (Wajib aktif semua agar bot bisa membaca pesan dan data member masuk/keluar)
 intents = discord.Intents.default()
 intents.members = True 
-intents.message_content = True # <-- Sudah ditambahkan agar bot responsif
+intents.message_content = True 
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # 2. SETTING ID CHANNEL DISCORD KAMU
+# ID Channel #welcome dari server secretone milikmu
 LOG_CHANNEL_ID = 1512126729399828621 
 
 def buat_gambar_log(avatar_bytes, username, status_text):
@@ -57,19 +58,14 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    """Kondisi 1: Ketika ada akun yang baru JOIN server"""
+    """Kondisi 1: Ketika ada akun yang baru JOIN server secara otomatis"""
     channel = bot.get_channel(LOG_CHANNEL_ID)
     if not channel:
         return
         
     try:
-        # Ambil foto profil akun yang baru join
         avatar_bytes = await member.display_avatar.read()
-        
-        # Buat gambarnya dengan teks WELCOME
         file_gambar = buat_gambar_log(avatar_bytes, str(member.name), status_text="WELCOME")
-        
-        # Kirim ke channel Discord
         discord_file = discord.File(fp=file_gambar, filename="welcome.png")
         await channel.send(f"Selamat datang {member.mention} di server kami! 🎉", file=discord_file)
     except Exception as e:
@@ -77,31 +73,50 @@ async def on_member_join(member):
 
 @bot.event
 async def on_member_remove(member):
-    """Kondisi 2: Ketika ada akun yang LEAVE / KELUAR server"""
+    """Kondisi 2: Ketika ada akun yang LEAVE / KELUAR server secara otomatis"""
     channel = bot.get_channel(LOG_CHANNEL_ID)
     if not channel:
         return
         
     try:
-        # Ambil foto profil akun yang leave
         avatar_bytes = await member.display_avatar.read()
-        
-        # Buat gambarnya dengan teks SAYONARA
         file_gambar = buat_gambar_log(avatar_bytes, str(member.name), status_text="SAYONARA")
-        
-        # Kirim ke channel Discord
         discord_file = discord.File(fp=file_gambar, filename="leave.png")
         await channel.send(f"Yah, {member.name} baru aja keluar dari server... 😢 Bye!", file=discord_file)
     except Exception as e:
         print(f"Gagal memproses gambar leave: {e}")
 
-# Perintah tes untuk memastikan bot tidak bisu lagi
+# Perintah tes ping biasa
 @bot.command()
 async def ping(ctx):
-    await ctx.send("Hi! Bot Warung Kiamat siap siaga memantau server! 🚀")
+    await ctx.send("Pong! Bot Warung Kiamat siap siaga memantau server! 🚀")
+
+# Perintah pancingan untuk ngetes sistem gambar welcome tanpa perlu ada orang join asli
+@bot.command()
+async def tesjoin(ctx):
+    """Ketik !tesjoin di server untuk memancing gambar welcome muncul menggunakan profilmu sendiri"""
+    channel = bot.get_channel(LOG_CHANNEL_ID)
+    if not channel:
+        return await ctx.send("ID Channel tidak ditemukan, cek kembali LOG_CHANNEL_ID kamu!")
+        
+    await ctx.send("⏳ Sedang memproses gambar pancingan...")
+    
+    try:
+        # Menggunakan data profil KAMU yang mengetik perintah untuk simulasi
+        avatar_bytes = await ctx.author.display_avatar.read()
+        
+        # Jalankan fungsi canvas Pillow yang sama
+        file_gambar = buat_gambar_log(avatar_bytes, str(ctx.author.name), status_text="WELCOME")
+        
+        # Kirim hasilnya ke channel welcome kamu
+        discord_file = discord.File(fp=file_gambar, filename="welcome_test.png")
+        await channel.send(f"⚠️ [TEST JOIN] Selamat datang {ctx.author.mention} di server kami! 🎉", file=discord_file)
+        
+    except Exception as e:
+        await ctx.send(f"❌ Terjadi error saat membuat gambar: {e}")
 
 # 3. KONEKSIKAN KE DISCORD DEVELOPER PORTAL
-# PENTING: Masukkan TOKEN BARU yang sudah di-reset di sini!
-TOKEN_BARU = "MASUKKAN_TOKEN_HASIL_RESET_DISINI"
+# PENTING: Masukkan TOKEN HASIL RESET PALING BARU di dalam tanda petik dua bawah ini!
+TOKEN_BARU = ("MTUxNTM2OTM0ODAyMDA0Mzg4Ng.G-bqsJ.vMC1jV_k59Q9NqaIZEX-VSTK47LiYeQOnWdj1w")
 
-bot.run("MTUxNTM2OTM0ODAyMDA0Mzg4Ng.G-bqsJ.vMC1jV_k59Q9NqaIZEX-VSTK47LiYeQOnWdj1w")
+bot.run(TOKEN_BARU)
