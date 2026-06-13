@@ -3,14 +3,14 @@ from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import io
 
-# 1. SETUP INTENTS (Wajib aktif agar bot tahu ada member masuk/keluar)
+# 1. SETUP INTENTS (Wajib aktif semua agar bot bisa membaca pesan dan data member masuk/keluar)
 intents = discord.Intents.default()
 intents.members = True 
+intents.message_content = True # <-- Sudah ditambahkan agar bot responsif
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # 2. SETTING ID CHANNEL DISCORD KAMU
-# Ganti angka di bawah ini dengan ID Channel 'member-logs' milikmu
 LOG_CHANNEL_ID = 1512126729399828621 
 
 def buat_gambar_log(avatar_bytes, username, status_text):
@@ -31,7 +31,6 @@ def buat_gambar_log(avatar_bytes, username, status_text):
     circular_avatar.putalpha(mask)
     
     # Tempel foto profil ke tengah-tengah background template
-    # Koordinat (300, 50) bisa kamu ubah/geser sesuai kecocokan gambarmu
     base_img.paste(circular_avatar, (300, 50), circular_avatar)
     
     # Menulis Teks Ucapan dan Username
@@ -63,15 +62,18 @@ async def on_member_join(member):
     if not channel:
         return
         
-    # Ambil foto profil akun yang baru join
-    avatar_bytes = await member.display_avatar.read()
-    
-    # Buat gambarnya dengan teks WELCOME
-    file_gambar = buat_gambar_log(avatar_bytes, str(member.name), status_text="WELCOME")
-    
-    # Kirim ke channel Discord
-    discord_file = discord.File(fp=file_gambar, filename="welcome.png")
-    await channel.send(f"Selamat datang {member.mention} di server kami! 🎉", file=discord_file)
+    try:
+        # Ambil foto profil akun yang baru join
+        avatar_bytes = await member.display_avatar.read()
+        
+        # Buat gambarnya dengan teks WELCOME
+        file_gambar = buat_gambar_log(avatar_bytes, str(member.name), status_text="WELCOME")
+        
+        # Kirim ke channel Discord
+        discord_file = discord.File(fp=file_gambar, filename="welcome.png")
+        await channel.send(f"Selamat datang {member.mention} di server kami! 🎉", file=discord_file)
+    except Exception as e:
+        print(f"Gagal memproses gambar welcome: {e}")
 
 @bot.event
 async def on_member_remove(member):
@@ -80,16 +82,26 @@ async def on_member_remove(member):
     if not channel:
         return
         
-    # Ambil foto profil akun yang leave
-    avatar_bytes = await member.display_avatar.read()
-    
-    # Buat gambarnya dengan teks SAYONARA
-    file_gambar = buat_gambar_log(avatar_bytes, str(member.name), status_text="SAYONARA")
-    
-    # Kirim ke channel Discord
-    discord_file = discord.File(fp=file_gambar, filename="leave.png")
-    await channel.send(f"Yah, {member.name} baru aja keluar dari server... 😢 Bye!", file=discord_file)
+    try:
+        # Ambil foto profil akun yang leave
+        avatar_bytes = await member.display_avatar.read()
+        
+        # Buat gambarnya dengan teks SAYONARA
+        file_gambar = buat_gambar_log(avatar_bytes, str(member.name), status_text="SAYONARA")
+        
+        # Kirim ke channel Discord
+        discord_file = discord.File(fp=file_gambar, filename="leave.png")
+        await channel.send(f"Yah, {member.name} baru aja keluar dari server... 😢 Bye!", file=discord_file)
+    except Exception as e:
+        print(f"Gagal memproses gambar leave: {e}")
+
+# Perintah tes untuk memastikan bot tidak bisu lagi
+@bot.command()
+async def ping(ctx):
+    await ctx.send("Pong! Bot Warung Kiamat siap siaga memantau server! 🚀")
 
 # 3. KONEKSIKAN KE DISCORD DEVELOPER PORTAL
-# Ganti teks di bawah dengan token rahasia dari Developer Portal-mu
-bot.run("MTUxNTM2OTM0ODAyMDA0Mzg4Ng.GjgH3a.bOOSfEp9d8MYdWnF3bHB67SU_YbEHj-Il1nJ_w")
+# PENTING: Masukkan TOKEN BARU yang sudah di-reset di sini!
+TOKEN_BARU = "MASUKKAN_TOKEN_HASIL_RESET_DISINI"
+
+bot.run(MTUxNTM2OTM0ODAyMDA0Mzg4Ng.G-bqsJ.vMC1jV_k59Q9NqaIZEX-VSTK47LiYeQOnWdj1w)
