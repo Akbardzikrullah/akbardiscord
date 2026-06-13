@@ -104,4 +104,4 @@ async def ping(ctx):
 # PENTING: Masukkan TOKEN BARU yang sudah di-reset di sini!
 TOKEN_BARU = "MASUKKAN_TOKEN_HASIL_RESET_DISINI"
 
-bot.run(MTUxNTM2OTM0ODAyMDA0Mzg4Ng.G-bqsJ.vMC1jV_k59Q9NqaIZEX-VSTK47LiYeQOnWdj1w)
+bot.run("MTUxNTM2OTM0ODAyMDA0Mzg4Ng.G-bqsJ.vMC1jV_k59Q9NqaIZEX-VSTK47LiYeQOnWdj1w")
