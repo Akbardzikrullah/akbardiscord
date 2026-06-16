@@ -154,6 +154,6 @@ async def tesleave(ctx):
 
 # 3. KONEKSIKAN KE DISCORD DEVELOPER PORTAL
 # PENTING: Masukkan TOKEN HASIL RESET PALING BARU di dalam tanda petik dua bawah ini!
-TOKEN_BARU = "MTUxNTM2OTM0ODAyMDA0Mzg4Ng.GZtr13.28p8EsngECeOwGDdemIOxrijCJnj2PUrgU6t_E"
+TOKEN_BARU = "MTUxNTM2OTM0ODAyMDA0Mzg4Ng.GojxnD.b8u-hcGQRGAbF4-zUBDwdetb8xl-T4oTiWErNQ"
 
 bot.run(TOKEN_BARU)
