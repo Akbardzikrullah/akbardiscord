@@ -27,3 +27,6 @@ jobs:
 
     - name: Jalankan Bot 24 Jam
       run: python main.py
+      env:
+        # Mengambil token rahasia dari brankas rahasia GitHub agar tidak diblokir push protection
+        DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
